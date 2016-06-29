@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -eo pipefail
+[[ "$TRACE" ]] && set -x
+
+out() {
+  echo "** $@"
+}
+
+run_escape_to() {
+  exec "$@"
+}
+
+run_xxx() {
+  out "run"
+}
+
+main() {
+  case "$1" in
+  escto)
+    shift; run_escape_to "$@";;
+  *)
+    run_xxx "$@";;
+  esac
+}
+
+main "$@"
