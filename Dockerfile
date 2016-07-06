@@ -1,7 +1,8 @@
-FROM gliderlabs/alpine:edge
+FROM skopciewski/ruby
 
 RUN echo "@testing http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-RUN apk-install --no-cache bash ruby getmail@testing procmail
+RUN apk-install bash getmail@testing procmail
+RUN gem-install mayaml-getmail
 COPY data/entrypoint /entrypoint
 RUN chmod 755 /entrypoint
 
