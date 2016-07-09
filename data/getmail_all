@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -eo pipefail
+[[ "$TRACE" ]] && set -x
+
+generate_configs_params() {
+  local getmail_dir=$1
+  local configs="-g ${getmail_dir}"
+  for file in `find ${getmail_dir} -type f`; do
+    if [[ "$file" =~ "oldmail-" ]]; then
+      continue
+    fi
+    configs="${configs} -r $(basename ${file})"
+  done
+  echo $configs
+}
+
+run_getmail() {
+  local configs_params=$1
+  getmail ${configs_params}
+}
+
+main() {
+  local getmail_dir=${GETMAIL_DIR:-/tmp/getmail}
+  local configs_params=$(generate_configs_params ${getmail_dir})
+  run_getmail "$configs_params"
+}
+
+main "$@"

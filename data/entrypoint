@@ -10,16 +10,50 @@ run_escape_to() {
   exec "$@"
 }
 
-run_xxx() {
-  out "run"
+create_mail_user() {
+  local user_id="$1"
+  local group_id="$2"
+  addgroup -g ${group_id} mailgrabbers
+  adduser -h /home/mailgrabber -D -u ${user_id} -G mailgrabbers mailgrabber
+}
+
+prepare_procmail_config() {
+  local mailgrabber_maildir=$1
+  local default_maildir_mailbox=$2
+  local procmail_filters=$3
+  gosu mailgrabber bash -c "sed -e 's|\[MAILGRABBER_MAILDIR\]|$mailgrabber_maildir|' -e 's|\[DEFAULT_MAILDIR_MAILBOX\]|$default_maildir_mailbox|' -e 's|\[PROCMAIL_FILTERS\]|$procmail_filters|' /tmp/procmailrc > ~/.procmailrc"
+  if [[ -f $PROCMAIL_FILTERS ]]; then
+    gosu mailgrabber bash -c 'sed -i -e "s/^#//" ~/.procmailrc'
+  fi
+}
+
+prepare_getmail_configs() {
+  local mayaml_file=$1
+  local getmail_dir=$2
+  gosu mailgrabber mayaml-getmail $mayaml_file $getmail_dir
+}
+
+run_get_mails() {
+  gosu mailgrabber getmail_all
 }
 
 main() {
+  local mail_user_id=${MAIL_USER_ID:-1000}
+  local mail_group_id=${MAIL_GROUP_ID:-1000}
+  local mailgrabber_maildir=${MAILGRABBER_MAILDIR}
+  local default_maildir_mailbox=${DEFAULT_MAILDIR_MAILBOX}
+  local procmail_filters=${PROCMAIL_FILTERS}
+  local mayaml_file=${MAYAML_FILE}
+  local getmail_dir=${GETMAIL_DIR}
+
   case "$1" in
   escto)
     shift; run_escape_to "$@";;
   *)
-    run_xxx "$@";;
+    create_mail_user "$mail_user_id" "$mail_group_id"
+    prepare_procmail_config "$mailgrabber_maildir" "$default_maildir_mailbox" "$procmail_filters"
+    prepare_getmail_configs "$mayaml_file" "$getmail_dir"
+    run_get_mails "$@";;
   esac
 }
 
