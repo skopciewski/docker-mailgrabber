@@ -2,7 +2,7 @@
 
 ## Usage
 
-The container provides script for running getmail and feting all emails from accounts defined in the mayaml.yml file (see: [Mayaml project][mayaml_url]). 
+The container provides script for running getmail and fetching all emails from accounts defined in the mayaml.yml file (see: [Mayaml project][mayaml_url]). 
 By default, all files go to the one `/mnt/mailgrabber/INBOX` maildir, but you can change that by providing additional procamil config.
 
 ```bash
