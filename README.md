@@ -18,7 +18,7 @@ By default, all files go to the one `/mnt/mailgrabber/INBOX` maildir, but you ca
 If you want to execute other command than `getmail`, run docker container with `escto` as first param:
 
 ```bash
-    docker run -it --rm --name maiilgrabber 
+    docker run -it --rm --name mailgrabber \
     -v /path/to/mayaml.yml:/mnt/mayaml.yml \
     -v /path/to_maildir:/mnt/mailgrabber \
     skopciewski/mailgrabber escto bash
