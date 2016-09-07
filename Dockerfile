@@ -9,7 +9,8 @@ RUN apk-install curl \
     && rm -rfv /var/cache/apk/*
 
 RUN echo "@testing http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-RUN apk-install bash getmail@testing procmail
+RUN echo "@edge http://dl-4.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
+RUN apk-install bash getmail@testing python2@edge procmail
 RUN gem-install mayaml-getmail
 
 ENV MAIL_USER_ID=1000
