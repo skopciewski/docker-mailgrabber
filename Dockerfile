@@ -1,12 +1,11 @@
 FROM skopciewski/ruby
 
 # grab gosu for easy step-down from root
-RUN apk-install curl \
+RUN apk add --no-cache curl \
     && curl -o /usr/local/bin/gosu -fsSL \
-      "https://github.com/tianon/gosu/releases/download/1.9/gosu-amd64" \
+      "https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64" \
     && chmod +x /usr/local/bin/gosu \
-    && apk del curl \
-    && rm -rfv /var/cache/apk/*
+    && apk del curl
 
 RUN echo "@testing http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 RUN echo "@edge http://dl-4.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
